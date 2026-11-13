@@ -1,0 +1,18 @@
+[
+  {
+    "id": "reg-1",
+    "classification": "internal",
+    "kind": "metadata",
+    "text": "Internal and metadata may leave to an approved destination."
+  },
+  {
+    "id": "reg-restricted-raw-curves",
+    "classification": "restricted",
+    "kind": "raw curves",
+    "text": "Restricted and raw curves may not leave unless the catalog row names an owner, in which case the label is needs-owner, not allow."
+  },
+  {
+    "id": "reg-other-pair",
+    "text": "Any other pair, including internal and raw curves, is deny."
+  }
+]

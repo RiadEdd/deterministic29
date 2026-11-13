@@ -1,0 +1,22 @@
+[
+  {
+    "destination": "Acme Surveys",
+    "kinds": ["metadata"]
+  },
+  {
+    "destination": "Basin Lab",
+    "kinds": ["metadata"]
+  },
+  {
+    "destination": "MapWorks",
+    "kinds": ["metadata"]
+  },
+  {
+    "destination": "North region office",
+    "kinds": ["raw curves"]
+  },
+  {
+    "destination": "PetroConsult",
+    "kinds": ["raw curves"]
+  }
+]

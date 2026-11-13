@@ -1,0 +1,93 @@
+[
+  {
+    "id": "DS-01",
+    "name": "North field well-log summary",
+    "kind": "metadata",
+    "classification": "internal",
+    "owner": null
+  },
+  {
+    "id": "DS-02",
+    "name": "Daily production summary",
+    "kind": "metadata",
+    "classification": "internal",
+    "owner": null
+  },
+  {
+    "id": "DS-03",
+    "name": "Pipeline inspection summary",
+    "kind": "metadata",
+    "classification": "internal",
+    "owner": null
+  },
+  {
+    "id": "DS-04",
+    "name": "Facility inventory",
+    "kind": "metadata",
+    "classification": "internal",
+    "owner": null
+  },
+  {
+    "id": "DS-05",
+    "name": "Survey index",
+    "kind": "metadata",
+    "classification": "internal",
+    "owner": null
+  },
+  {
+    "id": "DS-14",
+    "name": "North field well log",
+    "kind": "raw curves",
+    "classification": "restricted",
+    "owner": "Lina Haddad"
+  },
+  {
+    "id": "DS-16",
+    "name": "South field well log",
+    "kind": "raw curves",
+    "classification": "restricted",
+    "owner": "Karim Nasser"
+  },
+  {
+    "id": "DS-18",
+    "name": "Offshore well log",
+    "kind": "raw curves",
+    "classification": "restricted",
+    "owner": "Lina Haddad"
+  },
+  {
+    "id": "DS-20",
+    "name": "East field well log",
+    "kind": "raw curves",
+    "classification": "internal",
+    "owner": null
+  },
+  {
+    "id": "DS-22",
+    "name": "West field well log",
+    "kind": "raw curves",
+    "classification": "restricted",
+    "owner": null
+  },
+  {
+    "id": "DS-30",
+    "name": "Core photo set",
+    "kind": "metadata",
+    "classification": "blank",
+    "owner": null
+  },
+  {
+    "id": "DS-31",
+    "name": "Pressure test",
+    "kind": "raw curves",
+    "classification": "blank",
+    "owner": null
+  },
+  {
+    "id": "DS-41",
+    "name": "Restricted summary",
+    "kind": "metadata",
+    "classification": "restricted",
+    "owner": null
+  }
+]

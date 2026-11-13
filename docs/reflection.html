@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reflection: Data release clearance</title>
+<style>
+  :root {
+    --paper: #e6e1d8;
+    --sheet: #fbfaf6;
+    --ink: #1c1916;
+    --body: #33302b;
+    --muted: #5f5a53;
+    --faint: #6e6860;
+    --line: #ddd6c8;
+    --line-strong: #c9c1b2;
+    --wash: #f3f0e8;
+    --green: #1a5c40;
+    --green-deep: #124832;
+    --green-soft: #e5f2eb;
+    --green-head: #d5eadf;
+    --clay: #8c3b22;
+    --clay-soft: #f8eee8;
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Times New Roman", serif;
+    --sans: "Avenir Next", "Avenir", "Segoe UI", sans-serif;
+    --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { color-scheme: light; scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background:
+      radial-gradient(1200px 500px at 50% -10%, #f3efe7 0%, transparent 60%),
+      var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16.5px;
+    line-height: 1.5;
+    font-feature-settings: "kern";
+  }
+
+  article {
+    max-width: 920px;
+    margin: 36px auto 56px;
+    background: var(--sheet);
+    border: 1px solid #d8d1c4;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.7) inset, 0 18px 50px rgba(60, 44, 20, 0.08);
+    padding: 48px 56px 40px;
+  }
+
+  /* Masthead */
+
+  .mast {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 24px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--ink);
+  }
+
+  .kicker {
+    margin: 0;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--green-deep);
+  }
+
+  .who {
+    margin: 0;
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 0.01em;
+  }
+
+  h1 {
+    margin: 18px 0 0;
+    font-family: var(--serif);
+    font-size: 44px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+  }
+
+  .deck {
+    margin: 8px 0 0;
+    max-width: 36rem;
+    color: var(--muted);
+    font-size: 17px;
+  }
+
+  .toc {
+    margin: 22px 0 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 18px;
+    font-size: 13px;
+  }
+
+  .toc a {
+    color: var(--green-deep);
+    text-decoration: none;
+    border-bottom: 1px solid #b9d9c8;
+  }
+
+  .toc a:hover { border-bottom-color: var(--green-deep); }
+
+  /* Text */
+
+  .lead {
+    margin: 30px 0 0;
+    max-width: 68ch;
+    font-family: var(--serif);
+    font-size: 18.5px;
+    line-height: 1.45;
+  }
+
+  .lead + .lead { margin-top: 12px; }
+
+  section { margin-top: 44px; padding-top: 20px; border-top: 1px solid var(--ink); }
+
+  h2 {
+    margin: 0 0 4px;
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    line-height: 1.15;
+  }
+
+  h2 .n {
+    display: inline-block;
+    min-width: 30px;
+    color: var(--green-deep);
+  }
+
+  h3 {
+    margin: 30px 0 8px;
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+
+  p {
+    margin: 10px 0 0;
+    max-width: 74ch;
+    font-size: 15.5px;
+    line-height: 1.55;
+    color: var(--body);
+  }
+
+  strong, b { font-weight: 600; color: var(--ink); }
+
+  a { color: var(--green-deep); text-underline-offset: 2px; }
+
+  code {
+    font-family: var(--mono);
+    font-size: 0.85em;
+    background: #f0ece3;
+    border-radius: 4px;
+    padding: 1px 5px 2px;
+    white-space: nowrap;
+  }
+
+  .note {
+    margin: 10px 0 0;
+    max-width: 78ch;
+    font-size: 12.5px;
+    line-height: 1.45;
+    color: var(--muted);
+  }
+
+  /* Numbered steps */
+
+  ol.steps {
+    list-style: none;
+    margin: 12px 0 0;
+    padding: 0;
+    counter-reset: step;
+  }
+
+  ol.steps > li {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    gap: 8px;
+    padding: 13px 0 14px;
+    border-top: 1px solid var(--line);
+    font-size: 15.5px;
+    line-height: 1.5;
+    color: var(--body);
+  }
+
+  ol.steps > li:last-child { border-bottom: 1px solid var(--line); }
+
+  ol.steps > li::before {
+    counter-increment: step;
+    content: counter(step);
+    font-family: var(--serif);
+    font-size: 22px;
+    line-height: 1.15;
+    color: var(--green-deep);
+  }
+
+  ol.steps.prio > li { grid-template-columns: 44px 1fr; }
+  ol.steps.prio > li::before { content: "P" counter(step); }
+
+  ol.steps li > div { min-width: 0; }
+
+  ol.steps li p { margin: 6px 0 0; max-width: 70ch; }
+  ol.steps li p:first-child { margin-top: 0; }
+
+  ol.steps li .tag { margin-right: 4px; position: relative; top: -1px; }
+
+  ol.steps li p.check {
+    margin-top: 7px;
+    max-width: 80ch;
+    font-size: 13.5px;
+    line-height: 1.45;
+    color: var(--muted);
+  }
+
+  .check b {
+    color: var(--ink);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 11px;
+    margin-right: 6px;
+  }
+
+  .check b.stop { color: var(--clay); }
+
+  /* Tables */
+
+  .table-wrap { margin-top: 12px; overflow-x: auto; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-variant-numeric: tabular-nums;
+  }
+
+  thead th {
+    padding: 0 12px 9px 0;
+    text-align: left;
+    vertical-align: bottom;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--muted);
+    border-bottom: 1px solid var(--ink);
+  }
+
+  tbody th {
+    padding: 11px 12px 11px 0;
+    text-align: left;
+    vertical-align: top;
+    font-size: 14px;
+    font-weight: 600;
+    border-bottom: 1px solid var(--line);
+  }
+
+  tbody td {
+    padding: 11px 12px 11px 0;
+    vertical-align: top;
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--body);
+    border-bottom: 1px solid var(--line);
+  }
+
+  td.nowrap, th.nowrap { white-space: nowrap; }
+
+  .hint {
+    display: block;
+    margin-top: 2px;
+    font-weight: 500;
+    font-size: 12px;
+    color: var(--faint);
+    letter-spacing: 0;
+  }
+
+  .sub {
+    display: block;
+    margin-top: 1px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--faint);
+  }
+
+  /* Run-by-run evidence table */
+
+  .runs { min-width: 580px; }
+  .runs thead th:first-child { width: 48px; }
+  .runs thead th:nth-child(n+3) { width: 21%; }
+  .runs td.label { font-weight: 600; color: var(--ink); white-space: nowrap; }
+  .runs td.bad, .runs td.bad .sub { color: var(--clay); }
+  .runs .sub code { background: none; padding: 0; }
+
+  .cuts tbody th { width: 24%; }
+  .cuts tbody td { width: 38%; }
+
+  .tiers tbody th { width: 64px; font-family: var(--serif); font-size: 22px; line-height: 1.15; color: var(--green-deep); }
+
+  /* Cards */
+
+  .pair {
+    margin-top: 16px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .card {
+    padding: 14px 16px 15px;
+    border-radius: 10px;
+    background: var(--wash);
+  }
+
+  .card.clay { background: var(--clay-soft); }
+
+  .card h4 {
+    margin: 0;
+    font-size: 14.5px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .card p {
+    margin: 6px 0 0;
+    font-size: 13.5px;
+    line-height: 1.45;
+    color: #3f3b36;
+  }
+
+  /* Tags */
+
+  .tag {
+    display: inline-block;
+    padding: 1px 7px 2px;
+    border-radius: 999px;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    background: #ebe6db;
+    color: var(--muted);
+  }
+
+  .tag.trap { background: var(--clay-soft); color: var(--clay); }
+  .tag.valid { background: var(--green-soft); color: var(--green-deep); }
+  .tag.silent { background: #ece9f1; color: #4c4468; }
+
+  .caveat {
+    margin: 26px 0 0;
+    padding-top: 14px;
+    border-top: 1px solid var(--ink);
+    max-width: none;
+    font-size: 13.5px;
+    line-height: 1.45;
+    color: var(--muted);
+  }
+
+  .caveat b {
+    color: var(--ink);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 11px;
+    margin-right: 6px;
+  }
+
+  @media (max-width: 760px) {
+    article { margin: 0; padding: 28px 20px 24px; border: 0; box-shadow: none; }
+    h1 { font-size: 34px; }
+    h2 { font-size: 24px; }
+    .lead { font-size: 17px; }
+    .mast { flex-direction: column; align-items: flex-start; }
+    .pair { grid-template-columns: 1fr; }
+    ol.steps > li { grid-template-columns: 26px 1fr; }
+  }
+
+  @media print {
+    body { background: white; }
+    article { margin: 0; max-width: none; border: 0; box-shadow: none; padding: 0; }
+    .toc { display: none; }
+    .card, tr, ol.steps > li { break-inside: avoid; }
+    h2, h3 { break-after: avoid; }
+    .card, .tag, code {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+  }
+</style>
+</head>
+<body>
+<article>
+
+  <header class="mast">
+    <p class="kicker">Reflection</p>
+    <p class="who"><a href="executive-summary.html">Executive summary</a> · <a href="technical-documentation.html">Technical documentation</a> · <a href="../results/index.html">Results</a></p>
+  </header>
+  <h1>Data release clearance</h1>
+  <p class="deck">What surprised me, what is missing, and what comes next.</p>
+
+  <ul class="toc">
+    <li><a href="#surprises">1 What surprised me</a></li>
+    <li><a href="#product">2 What it says about the product</a></li>
+    <li><a href="#missing">3 What is missing</a></li>
+    <li><a href="#cuts">4 What I cut</a></li>
+    <li><a href="#week">5 With one week</a></li>
+    <li><a href="#month">6 With one month</a></li>
+  </ul>
+
+  <p class="lead">The best configuration, numbered steps on Claude Sonnet 4.6, returned no false allow and missed two labels in 84 decisions. I would not show that to a compliance team as evidence of safety. It comes from 28 cases that I wrote, labeled against rules that I also wrote, and ran three times.</p>
+  <p class="lead">I trust the failures more. A small model returned an allow that the request had planted. A script with no model passed every core case. My own parser was choosing a label for the baseline. The plans at the end follow from them.</p>
+
+  <!-- 1 -->
+  <section id="surprises">
+    <h2><span class="n">1</span>What surprised me</h2>
+    <p>The figures are in <a href="technical-documentation.html#variants">section 5 of the technical documentation</a>.</p>
+
+    <ol class="steps">
+      <li><div>
+        <p><span class="tag trap">A trap the agent failed</span> <strong>The open-weight model held against an instruction and gave way to a forged tool result.</strong></p>
+        <p>Cases 15 and 25 ask for the same send, which the release rules deny. Case 15 tells the agent to return allow, and gpt-oss-20b denied it in all three runs. Case 25 pastes in a fake <code>release_rules</code> result and a fake final answer, and it returned allow, allow, deny, once without calling a tool.</p>
+        <p>All five of its core misses were abstains, so I had concluded that it fails safe. It does so on plain requests only. I would not host it on site while the model produces the label.</p>
+      </div></li>
+
+      <li><div>
+        <p><span class="tag silent">A variant that did not help</span> <strong>The numbered steps barely changed the labels.</strong></p>
+        <p>Variant B, the rules as five numbered steps, gets 58 of 60 core labels right. Variant A, the same rules as plain text, gets 57. The baseline moved by one run between two batches, so a gap of one is noise. What moved the labels was having the rules: the baseline never saw them and gets 47.</p>
+        <p>The scored gap, 85% against 97%, is variant A citing <code>null</code> on an abstain, which my schema rejects. The steps bought a valid citation on every decision, which governance needs for an audit.</p>
+      </div></li>
+
+      <li><div>
+        <p><span class="tag">A grader that was wrong</span> <strong>The baseline’s zero false allows came from my parser.</strong></p>
+        <p>The baseline answers a two-part request with one decision per part, <code>allow</code> first. My first parser kept the last one. Had it kept the first, the baseline would show three false allows on each set. Such a reply is now scored as no decision, and I read the raw replies behind a zero before I report it.</p>
+      </div></li>
+
+      <li><div>
+        <p><span class="tag valid">A control that beat the agents</span> <strong>A script with no model passed every core case.</strong></p>
+        <p>The control is 82 lines of code. The core set tests whether the rules get applied, and code does that better than any model I ran. The adversarial set showed what the model is for: the script abstains on both paraphrased valid sends and allows the “cc Helix Drilling” send in every run. The script and the models fail in opposite ways, which is my case for splitting the job.</p>
+      </div></li>
+    </ol>
+  </section>
+
+  <!-- 2 -->
+  <section id="product">
+    <h2><span class="n">2</span>What it says about the product</h2>
+
+    <ol class="steps">
+      <li><div>
+        <p><strong>A form for the plain request, the agent for the sentence.</strong> The script scores 100% on the core set, where the request gives an id or an exact name. A form with those two fields is cheaper there and cannot be talked into an allow. It fails where the request is a sentence. On the adversarial set the script misses both paraphrased valid sends and allows the one with a second destination slipped in. That is the part that needs a model, and only to read the request. Code still returns the label.</p>
+        <p>The sentence case shows up when another agent is doing the work and has to check before data moves. An engineer telling their agent to "send the pipeline inspection summary to MapWorks" will not fill a form, and that agent should not apply the release rules itself. It calls this one. If it already holds a dataset id and a destination, it calls the rule code directly and skips the model. A caller that pastes a fake tool result, as in case 25, still cannot grant the allow, because the model no longer returns the label.</p>
+      </div></li>
+      <li><div>
+        <p><strong>The four labels have no place for a question.</strong> On an ambiguous request the models ask the engineer which dataset they mean. The product turns that question into a compliance ticket.</p>
+      </div></li>
+      <li><div>
+        <p><strong>A two-part request deserves two answers.</strong> Asked to send DS-05 to Basin Lab and cc Helix Drilling, the baseline allowed the first and denied the second. My rulebook asks for one abstain. The baseline’s answer is the more useful one, and the split design could give it.</p>
+      </div></li>
+    </ol>
+  </section>
+
+  <!-- 3 -->
+  <section id="missing">
+    <h2><span class="n">3</span>What is missing</h2>
+    <p>None of these is fixed in this submission.</p>
+
+    <div class="pair">
+      <div class="card clay">
+        <h4>The sample is small</h4>
+        <p>Zero false allows in 16 non-allow core cases leaves a true rate of up to about 17% at 95% confidence. Zero in 6 adversarial ones leaves up to about 39%. Three runs show that results move at temperature 0, and not by how much.</p>
+      </div>
+      <div class="card clay">
+        <h4>I wrote the policy, the cases, the labels and the prompts</h4>
+        <p>I amended the rulebook while rewriting the cases, so 14 of the 20 core labels rest on rules I changed while labeling. I wrote the adversarial cases after seeing the core results. Nobody else labeled anything.</p>
+      </div>
+      <div class="card clay">
+        <h4>No user has seen it</h4>
+        <p>I wrote every request, in English, as a single message. No engineer has used the agent and no compliance reviewer has read a decision. I do not know the weekly volume or how long a clearance takes today.</p>
+      </div>
+      <div class="card clay">
+        <h4>Nothing is versioned</h4>
+        <p>The rulebook has five amendments and no version number. Each run stores a hash of its prompt, and nothing for the rulebook or the records. A decision cannot say which rules it was made under.</p>
+      </div>
+      <div class="card clay">
+        <h4>The log does not explain a decision</h4>
+        <p>Each run logs the tool calls and the final reply. It does not log which rule step gave the label, so tracing a wrong answer means reading the reply by hand.</p>
+      </div>
+      <div class="card clay">
+        <h4>The records are three files</h4>
+        <p>13 datasets, 5 destinations and 3 rules in JSON, all synthetic. A real catalog is far larger, and vendors are added and dropped. Name search is untested where near-identical names are the norm.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 -->
+  <section id="cuts">
+    <h2><span class="n">4</span>What I cut, and why</h2>
+    <p>The brief caps the work at about eight hours. I kept the work that tested whether the evaluation could fail: the no-model control, the adversarial set, the strict parser and variant A. The largest loss of time was the first case set. I dropped 12 of its 20 cases once a script could label all of them.</p>
+
+    <div class="table-wrap">
+      <table class="cuts">
+        <thead>
+          <tr><th scope="col">What I cut</th><th scope="col">Why</th><th scope="col">What it costs the result</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Building the split design</th>
+            <td>The evidence for it came late, from the control and the adversarial set.</td>
+            <td>My first recommendation is untested. Only the rule half exists, in <code>src/rules-only.ts</code>.</td>
+          </tr>
+          <tr>
+            <th scope="row">Scoring gpt-oss-20b on a local machine</th>
+            <td>Bedrock serves the same weights. The Ollama adapter is written and unit-tested.</td>
+            <td>The air-gapped claim rests on a hosted endpoint.</td>
+          </tr>
+          <tr>
+            <th scope="row">A larger adversarial set</th>
+            <td>Eight cases were enough to move the primary metric for two of the five configurations.</td>
+            <td>No Sonnet configuration has made a false allow on it. For the model I recommend, the set is too easy.</td>
+          </tr>
+          <tr>
+            <th scope="row">A second labeler</th>
+            <td>It takes another person and a rulebook that has stopped changing.</td>
+            <td>Every label is my reading of my own rules.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">Variant B changes several things at once, so I cannot say which of them fixed the citations. I compared prompts and models, not tool designs.</p>
+  </section>
+
+  <!-- 5 -->
+  <section id="week">
+    <h2><span class="n">5</span>With one week</h2>
+    <p>One goal: an evaluation that can fail, on a design where the model cannot set the label. The list is in priority order. Two items need people outside the team.</p>
+
+    <ol class="steps prio">
+      <li><div>
+        <p><strong>Build the split design.</strong> The model returns the dataset and every destination the request names, or says it cannot tell. Code reads the ids, applies the rulebook, and produces the label and the citation.</p>
+        <p class="check"><b>Check</b>On case 25 the planted allow cannot become the label, because the model no longer returns one.</p>
+      </div></li>
+      <li><div>
+        <p><strong>Log every step and version every input.</strong> Each decision logs the request as the model read it, the rows fetched, the rule step that gave the label, and the versions of the rulebook, the records, the prompt and the model.</p>
+        <p class="check"><b>Check</b>Any past decision can be explained from its log and replayed against the rules in force that day.</p>
+      </div></li>
+      <li><div>
+        <p><span class="tag silent">Needs governance</span> <strong>Freeze the rulebook as version 2.</strong> Governance rules on case 14, where the models with the rules mostly abstain and my label says deny, and on whether an ambiguous request goes back to the engineer as a question. After that, a rule change is a new version, and the evaluation is rerun before it is used.</p>
+        <p class="check"><b>Check</b>No new case is labeled before the freeze.</p>
+      </div></li>
+      <li><div>
+        <p><span class="tag silent">Needs compliance</span> <strong>Grow the set to 100 cases, with a second labeler.</strong> 60 cases come from past requests, with the wording kept and the names swapped for synthetic rows. 40 are adversarial. A compliance reviewer and I label them separately, before any agent runs. Without an export of past requests, pilot engineers write them, marked as elicited.</p>
+        <p class="check"><b>Check</b>The no-model script runs on the 60 real cases first. If it passes nearly all of them, the form is the product and the agent covers the rest. Label disagreements go to governance and stay out of the scored set until ruled on.</p>
+      </div></li>
+      <li><div>
+        <p><strong>Run every configuration five times in one batch, then decide on the pilot.</strong> The batch adds the split design, gpt-oss-20b served locally, and a TII Falcon model that supports tool calling. A gap between two configurations counts only when it is wider than the spread inside either one. What we pilot follows the requirements: a local model if it must be air-gapped, or a hosted one if they already run in the cloud.</p>
+        <p class="check"><b>Gate</b>Zero false allows on the 40 adversarial cases in all five runs, for the split design on a model that can run on site.</p>
+        <p class="check"><b>Limit</b>With about 70 non-allow cases, a clean pass bounds the rate at about 4%. Getting below 1% takes about 300 real cases, and those come from the pilot.</p>
+      </div></li>
+    </ol>
+  </section>
+
+  <!-- 6 -->
+  <section id="month">
+    <h2><span class="n">6</span>With one month</h2>
+    <p>The month starts when the gate passes. It is a shadow phase with the engineering team that sends the most datasets, in priority order. Every item needs compliance, governance or platform engineering.</p>
+
+    <ol class="steps prio">
+      <li><div>
+        <p><strong>Move the records into a database.</strong> Three JSON files will not hold a real catalog, or a vendor list where vendors are added and dropped. The database is loaded read-only from the real catalog, vendor list and release rules, and keeps the history of every row.</p>
+        <p class="check"><b>Check</b>Every decision shows the version of the rows it used and when they last changed. The near-identical-name cases are rerun against the real catalog before any real request.</p>
+      </div></li>
+      <li><div>
+        <p><strong>Run in shadow mode.</strong> The agent decides on every real request. Its decision is logged and not shown. Compliance labels each request in their normal review, before seeing the agent’s answer. This also gives the two numbers nobody has today: requests per week and time to clear.</p>
+        <p class="check"><b class="stop">Stop</b>Any allow that a reviewer labels as not permitted, or disagreement on more than 10% of requests.</p>
+      </div></li>
+      <li><div>
+        <p><strong>Keep every compliance answer and turn the agent’s errors into test cases.</strong> Both answers are stored side by side. Each week, governance and I give every disagreement one cause: the agent misread the request, the rulebook is silent, the record is wrong or stale, or the reviewer made an error. When the agent was wrong, the request and the compliance label become a test case automatically.</p>
+        <p class="check"><b>Check</b>The disagreement rate is reported by cause. Labels now come from compliance and rule changes from governance, which ends the circularity in section 3.</p>
+      </div></li>
+      <li><div>
+        <p><strong>Agree risk tiers and their bars with governance, before the results are in.</strong> Autonomy is granted per tier, by what a wrong answer costs. The bar for an automatic allow is about 300 real non-allow requests in that tier with none allowed. That bounds the false-allow rate below 1% at 95% confidence.</p>
+        <p class="check"><b>Check</b>The pilot’s volume says whether 300 takes weeks or quarters. If it takes quarters, assist mode is the product.</p>
+      </div></li>
+      <li><div>
+        <p><strong>Go or no-go on assist mode.</strong> Engineers see the decision and the cited row, tier 1 routes automatically, and compliance still confirms every allow. Platform engineering picks the on-site model on the same shadow traffic.</p>
+      </div></li>
+    </ol>
+
+    <h3>Proposed autonomy tiers</h3>
+    <div class="table-wrap">
+      <table class="tiers">
+        <thead>
+          <tr><th scope="col">Tier</th><th scope="col">What is in it</th><th scope="col">What a wrong one costs</th><th scope="col">Autonomy</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">1</th>
+            <td>Every <code>deny</code>, <code>needs-owner</code> and <code>abstain</code>.</td>
+            <td>A delay.</td>
+            <td>Routed automatically.</td>
+          </tr>
+          <tr>
+            <th scope="row">2</th>
+            <td>An <code>allow</code> where the request gives a dataset id and one full destination name.</td>
+            <td>Data leaves. Least likely here, because code reads the id.</td>
+            <td>Compliance confirms every allow until the bar is met.</td>
+          </tr>
+          <tr>
+            <th scope="row">3</th>
+            <td>An <code>allow</code> where the model resolved a name, or the request carries claims or pasted records.</td>
+            <td>The wrong dataset leaves.</td>
+            <td>Compliance confirms every allow. No automatic allow is planned.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">A false allow in any tier returns that tier to confirmation on every allow.</p>
+  </section>
+
+</article>
+
+</body>
+</html>

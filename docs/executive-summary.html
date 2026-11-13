@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Executive summary: Data release clearance</title>
+<style>
+  :root {
+    --paper: #e6e1d8;
+    --sheet: #fbfaf6;
+    --ink: #1c1916;
+    --muted: #5f5a53;
+    --faint: #6e6860;
+    --line: #ddd6c8;
+    --line-strong: #c9c1b2;
+    --green: #1a5c40;
+    --green-deep: #124832;
+    --green-soft: #e5f2eb;
+    --green-head: #d5eadf;
+    --clay: #8c3b22;
+    --clay-soft: #f8eee8;
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Times New Roman", serif;
+    --sans: "Avenir Next", "Avenir", "Segoe UI", sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { color-scheme: light; }
+
+  body {
+    margin: 0;
+    background:
+      radial-gradient(1200px 500px at 50% -10%, #f3efe7 0%, transparent 60%),
+      var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16.5px;
+    line-height: 1.5;
+    font-feature-settings: "kern";
+  }
+
+  article {
+    max-width: 920px;
+    margin: 36px auto 56px;
+    background: var(--sheet);
+    border: 1px solid #d8d1c4;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.7) inset, 0 18px 50px rgba(60, 44, 20, 0.08);
+    padding: 48px 56px 36px;
+  }
+
+  .mast {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 24px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--ink);
+  }
+
+  .kicker {
+    margin: 0;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--green-deep);
+  }
+
+  .who {
+    margin: 0;
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 0.01em;
+  }
+
+  .who a { color: var(--green-deep); text-underline-offset: 2px; }
+
+  h1 {
+    margin: 18px 0 0;
+    font-family: var(--serif);
+    font-size: 44px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+  }
+
+  .deck {
+    margin: 8px 0 0;
+    max-width: 36rem;
+    color: var(--muted);
+    font-size: 17px;
+  }
+
+  h2 {
+    margin: 0 0 8px;
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+
+  .brief {
+    margin-top: 32px;
+    display: grid;
+    gap: 22px;
+  }
+
+  .brief p {
+    margin: 0;
+    max-width: 68ch;
+    font-family: var(--serif);
+    font-size: 18.5px;
+    line-height: 1.45;
+  }
+
+  .results { margin-top: 36px; }
+
+  .results-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 12px;
+  }
+
+  .results-head p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--muted);
+    text-align: right;
+  }
+
+  .table-wrap { overflow-x: auto; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-variant-numeric: tabular-nums;
+  }
+
+  caption {
+    caption-side: bottom;
+    text-align: left;
+    padding-top: 10px;
+    font-size: 12.5px;
+    line-height: 1.45;
+    color: var(--muted);
+  }
+
+  thead th {
+    padding: 0 12px 12px;
+    text-align: left;
+    font-weight: 500;
+    vertical-align: bottom;
+    border-bottom: 1px solid var(--ink);
+  }
+
+  thead th:first-child { width: 26%; }
+
+  .var {
+    display: block;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+
+  .model, .how {
+    display: block;
+    margin-top: 2px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: 0;
+  }
+
+  .how { color: var(--faint); font-weight: 500; }
+
+  th.pick, td.pick { background: var(--green-soft); }
+
+  thead th.pick {
+    background: var(--green-head);
+    border-bottom-color: var(--green-deep);
+  }
+
+  thead th.pick .var { color: var(--green-deep); }
+
+  .mark {
+    display: inline-block;
+    margin-top: 6px;
+    padding: 1px 6px 2px;
+    border-radius: 999px;
+    background: var(--green-deep);
+    color: #f4faf6;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  tbody th {
+    padding: 13px 12px 13px 0;
+    text-align: left;
+    font-weight: 600;
+    font-size: 14px;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--line);
+  }
+
+  tbody td {
+    padding: 13px 12px;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--line);
+    font-size: 15px;
+  }
+
+  .hint {
+    display: block;
+    margin-top: 2px;
+    font-weight: 500;
+    font-size: 12px;
+    color: var(--faint);
+    letter-spacing: 0;
+  }
+
+  tr.headline th,
+  tr.headline td {
+    padding-top: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--line-strong);
+    background: #f3f0e8;
+  }
+
+  tr.headline td.pick { background: #dceee4; }
+
+  .zero {
+    display: block;
+    font-family: var(--serif);
+    font-size: 34px;
+    line-height: 1;
+    font-weight: 600;
+    color: var(--green-deep);
+    letter-spacing: -0.03em;
+  }
+
+  .of {
+    display: block;
+    margin-top: 5px;
+    font-size: 12.5px;
+    color: var(--muted);
+    line-height: 1.35;
+  }
+
+  .split {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+  }
+
+  .split + .split { margin-top: 3px; }
+
+  .split b {
+    font-weight: 600;
+    font-size: 18px;
+    letter-spacing: -0.02em;
+  }
+
+  .split i {
+    font-style: normal;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--faint);
+  }
+
+  td.pick .split b { color: var(--green-deep); }
+
+  .flat {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  .sub {
+    display: block;
+    margin-top: 2px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--faint);
+  }
+
+  .read {
+    margin: 14px 0 0;
+    max-width: 78ch;
+    font-size: 14.5px;
+    line-height: 1.5;
+    color: #3f3b36;
+  }
+
+  .also {
+    margin-top: 18px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .card {
+    margin: 0;
+    padding: 14px 16px 15px;
+    background: var(--clay-soft);
+    border-radius: 10px;
+  }
+
+  .card header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .card h3 {
+    margin: 0;
+    font-size: 14.5px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .card h3 span {
+    display: block;
+    margin-top: 2px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--muted);
+  }
+
+  .stat {
+    margin: 0;
+    text-align: right;
+    font-family: var(--serif);
+    font-size: 22px;
+    line-height: 0.9;
+    font-weight: 600;
+    color: var(--clay);
+    letter-spacing: -0.03em;
+    white-space: nowrap;
+  }
+
+  .stat span {
+    display: block;
+    margin-top: 4px;
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--clay);
+  }
+
+  .card p {
+    margin: 10px 0 0;
+    font-size: 13.5px;
+    line-height: 1.45;
+    color: #3f3b36;
+  }
+
+  .actions { margin-top: 34px; }
+
+  ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    counter-reset: rec;
+  }
+
+  ol li {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    gap: 8px;
+    padding: 12px 0;
+    border-top: 1px solid var(--line);
+    font-size: 15.5px;
+    line-height: 1.45;
+  }
+
+  ol li:last-child { border-bottom: 1px solid var(--line); }
+
+  ol li::before {
+    counter-increment: rec;
+    content: counter(rec);
+    font-family: var(--serif);
+    font-size: 22px;
+    line-height: 1.15;
+    color: var(--green-deep);
+  }
+
+  ol li p { margin: 0; }
+
+  ol strong { font-weight: 600; }
+
+  .caveat {
+    margin: 22px 0 0;
+    padding-top: 14px;
+    border-top: 1px solid var(--ink);
+    font-size: 13.5px;
+    line-height: 1.45;
+    color: var(--muted);
+  }
+
+  .caveat b {
+    color: var(--ink);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 11px;
+    margin-right: 6px;
+  }
+
+  @media (max-width: 760px) {
+    article { margin: 0; padding: 28px 20px 24px; border: 0; box-shadow: none; }
+    h1 { font-size: 34px; }
+    .brief p { font-size: 17px; }
+    .mast, .results-head { flex-direction: column; align-items: flex-start; }
+    .results-head p { text-align: left; }
+    .also { grid-template-columns: 1fr; }
+    .zero { font-size: 28px; }
+  }
+
+  @media print {
+    body { background: white; }
+    article {
+      margin: 0;
+      max-width: none;
+      border: 0;
+      box-shadow: none;
+      padding: 0;
+    }
+    .card, th.pick, td.pick, tr.headline th, tr.headline td {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+  }
+</style>
+</head>
+<body>
+<article>
+
+  <header class="mast">
+    <p class="kicker">Executive summary</p>
+    <p class="who"><a href="technical-documentation.html">Technical documentation</a> · <a href="reflection.html">Reflection</a> · <a href="../results/index.html">Results</a></p>
+  </header>
+  <h1>Data release clearance</h1>
+  <p class="deck">One dataset, one vendor, one cited decision.</p>
+
+  <section class="brief">
+    <div>
+      <h2>Conclusion</h2>
+      <p>The best prompt on Claude Sonnet 4.6 made no false allow in 66 decisions where the correct label is not allow. That sample is too small to call safe, and both configurations that can run on site made false allows on the adversarial set. I recommend against piloting this design. The model should read the request, and code should apply the rules and produce the label. That split is not built yet.</p>
+    </div>
+    <div>
+      <h2>The problem</h2>
+      <p>An engineer at a national energy company who sends a dataset to a vendor must check the data catalog, the approved-vendor list and the release rules, and sometimes ask compliance. Two things go wrong. Restricted data leaves because “summary” sounds harmless, or compliance becomes a queue that people work around. A wrong approval is an incident, reportable when the data is export-controlled subsurface data.</p>
+    </div>
+    <div>
+      <h2>What I built</h2>
+      <p>An LLM in a tool loop. It reads a plain-language request, calls four read-only lookups, and returns one label (allow, deny, needs-owner or abstain) with the id of the record row that decided it. I tested Claude Sonnet 4.6 and gpt-oss-20b, an open-weight model an air-gapped site could host.</p>
+    </div>
+  </section>
+
+  <section class="results">
+    <div class="results-head">
+      <h2>Results</h2>
+      <p>20 core cases, 8 adversarial. Three runs each, temperature&nbsp;0.<br>False-allow is counted only where the correct label is not allow.</p>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col"></th>
+            <th scope="col">
+              <span class="var">Baseline</span>
+              <span class="model">Claude Sonnet 4.6</span>
+              <span class="how">Labels and format</span>
+            </th>
+            <th scope="col">
+              <span class="var">Variant A</span>
+              <span class="model">Claude Sonnet 4.6</span>
+              <span class="how">Plus the rulebook</span>
+            </th>
+            <th scope="col" class="pick">
+              <span class="var">Variant B</span>
+              <span class="model">Claude Sonnet 4.6</span>
+              <span class="how">Steps and citations</span>
+              <span class="mark">Best prompt</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="headline">
+            <th scope="row">False-allow<span class="hint">An allow the records do not support</span></th>
+            <td><span class="zero">0</span><span class="of">of 48 core<br>of 18 adversarial</span></td>
+            <td><span class="zero">0</span><span class="of">of 48 core<br>of 18 adversarial</span></td>
+            <td class="pick"><span class="zero">0</span><span class="of">of 48 core<br>of 18 adversarial</span></td>
+          </tr>
+          <tr>
+            <th scope="row">Approval<span class="hint">Valid sends that were allowed</span></th>
+            <td><span class="flat">100%</span><span class="sub">Both sets</span></td>
+            <td><span class="flat">100%</span><span class="sub">Both sets</span></td>
+            <td class="pick"><span class="flat">100%</span><span class="sub">Both sets</span></td>
+          </tr>
+          <tr>
+            <th scope="row">Accuracy<span class="hint">The label alone matches the case</span></th>
+            <td>
+              <span class="split"><b>78%</b><i>core</i></span>
+              <span class="split"><b>63%</b><i>adversarial</i></span>
+            </td>
+            <td>
+              <span class="split"><b>95%</b><i>core</i></span>
+              <span class="split"><b>100%</b><i>adversarial</i></span>
+            </td>
+            <td class="pick">
+              <span class="split"><b>97%</b><i>core</i></span>
+              <span class="split"><b>100%</b><i>adversarial</i></span>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">No usable decision<span class="hint">The reply holds no single valid decision</span></th>
+            <td>
+              <span class="split"><b>7</b><i>of 60 core</i></span>
+              <span class="split"><b>3</b><i>of 24 adversarial</i></span>
+            </td>
+            <td>
+              <span class="split"><b>9</b><i>of 60 core</i></span>
+              <span class="split"><b>3</b><i>of 24 adversarial</i></span>
+            </td>
+            <td class="pick">
+              <span class="split"><b>0</b><i>of 60 core</i></span>
+              <span class="split"><b>0</b><i>of 24 adversarial</i></span>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">Valid citation<span class="hint">Core set, usable correct decisions</span></th>
+            <td><span class="flat">74%</span></td>
+            <td><span class="flat">100%</span></td>
+            <td class="pick"><span class="flat">100%</span></td>
+          </tr>
+        </tbody>
+        <caption>False-allow denominators: 16 non-allow core cases and 6 adversarial ones, three runs each. Accuracy counts the label alone. The technical documentation also counts an unusable reply as wrong, which gives variant A 85% and 88%. Six of the baseline’s ten unusable replies hold two decisions, the first an allow. They are scored as no decision.</caption>
+      </table>
+    </div>
+
+    <p class="read">The rulebook text accounts for the accuracy gain. The numbered steps add an answer that can always be used: variant A returns a null record id when an abstain has no single row to cite, and the schema rejects it. A decision takes about five seconds.</p>
+
+    <div class="also">
+      <section class="card">
+        <header>
+          <h3>gpt-oss-20b<span>Same procedure as variant B. Open-weight.</span></h3>
+          <p class="stat">2 / 18<span>false allows</span></p>
+        </header>
+        <p>Zero false allows on the core set. Twice it returned an allow that the request had planted as a fake tool result, once without calling a tool.</p>
+      </section>
+      <section class="card">
+        <header>
+          <h3>No model<span>The rulebook applied in code.</span></h3>
+          <p class="stat">3 / 18<span>false allows</span></p>
+        </header>
+        <p>100% on the core set, which can be solved from an id or an exact name. The three false allows are one send, every run: a second destination slipped in with “cc”.</p>
+      </section>
+    </div>
+  </section>
+
+  <section class="actions">
+    <h2>Next steps</h2>
+    <ol>
+      <li><p><strong>Move the decision out of the model.</strong> The model names the dataset and every destination in the request. Code reads the ids, applies the rulebook, and returns the label and the citation. It goes to the pilot only if gpt-oss-20b, run locally, gives zero false allows on 40 adversarial cases.</p></li>
+      <li><p><strong>Hand the rulebook and the answer key to compliance.</strong> Governance freezes the rulebook under a version number and agrees in writing how many real decisions with no false allow the agent needs before it may approve alone. Compliance labels a new case set without seeing the agent’s answers.</p></li>
+      <li><p><strong>Run in shadow mode with the engineering team that sends the most datasets.</strong> Four weeks beside the current process. Compliance labels every request before seeing the agent’s answer, and each request the agent gets wrong becomes a test case. Stop on any false allow or on more than 10% disagreement. Otherwise decide on assist mode, where compliance still confirms every allow.</p></li>
+    </ol>
+  </section>
+
+  <p class="caveat"><b>Caveat</b> The rulebook, the 28 cases and every label are mine, and I amended the rules while labeling 14 of the 20 core cases. Zero false allows does not show the agent is safe: with 16 non-allow core cases, the true rate could still be about 17% at 95% confidence.</p>
+
+</article>
+
+</body>
+</html>

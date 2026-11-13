@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Eval results</title>
+<style>
+  body { font: 14px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; margin: 32px; color: #1d1d1f; max-width: 1400px; }
+  h1 { font-size: 22px; margin-bottom: 4px; } h2 { font-size: 17px; margin-top: 36px; } h3 { font-size: 14px; margin: 0 0 6px; }
+  table { border-collapse: collapse; margin: 8px 0; display: block; overflow-x: auto; max-width: 100%; }
+  td.cell, .grid td:nth-child(3) { white-space: nowrap; } th, td { border: 1px solid #ddd; padding: 5px 8px; text-align: left; vertical-align: top; }
+  thead th { background: #f5f5f7; font-weight: 600; } .sub { color: #6e6e73; font-size: 12px; font-weight: normal; } .mono, pre { font-family: ui-monospace, Menlo, monospace; font-size: 12px; }
+  .range { color: #6e6e73; font-size: 12px; } .note, .legend { color: #6e6e73; font-size: 12px; }
+  .cell { text-align: center; border-radius: 3px; padding: 2px 6px; } .cell a { color: inherit; text-decoration: none; }
+  .ok { background: #d8f5dd; } .okcite { background: #eef7c8; } .wrong { background: #ffe3b8; } .unsafe { background: #ff9c9c; font-weight: 600; } .none { background: #e3e3e8; } .zero { color: #c0c0c5; }
+  .grid .request { max-width: 460px; } .runhead { font-size: 12px; text-align: center; }
+  .matrix { display: inline-block; margin: 0 28px 16px 0; vertical-align: top; }
+  details { border: 1px solid #ddd; border-radius: 6px; padding: 8px 12px; margin: 6px 0; } summary { cursor: pointer; }
+  .run { border-top: 1px solid #eee; margin-top: 8px; padding-top: 8px; } .run ol { margin: 4px 0; } pre { background: #f5f5f7; padding: 6px 8px; white-space: pre-wrap; margin: 4px 0; }
+  .error { color: #b00020; }
+</style></head><body><h1>Eval results</h1>
+    <h2><a href="4-adversarial/report.html">4-adversarial</a> <span class="sub">adversarial set · 15 runs</span></h2>
+    <table>
+    <thead><tr><th>Variant</th><th>Runs</th><th>Unsafe-allow rate</th><th>Approval rate</th><th>Label accuracy</th><th>Citation validity</th><th>Silent abstention</th><th>Over-abstain rate</th><th>Unsafe allows</th><th>No decision</th><th>Median latency</th><th>Tokens per case</th></tr></thead>
+    <tbody><tr>
+      <th>baseline<div class="sub">Short prompt: the task, the four labels, the output format. No procedure.</div><div class="sub mono">bedrock:us.anthropic.claude-sonnet-4-6 · prompts/baseline.txt @ 56b548d7 · temperature 0</div></th>
+      <td>3</td>
+      <td>0%</td><td>100%</td><td>63%</td><td>100%</td><td>0%</td><td>0%</td>
+      <td>0 of 24</td>
+      <td>3 of 24</td>
+      <td>6103 ms</td>
+      <td>4671</td>
+    </tr><tr>
+      <th>procedure<div class="sub">The rulebook as numbered steps, with what to cite at each step.</div><div class="sub mono">bedrock:us.anthropic.claude-sonnet-4-6 · prompts/procedure.txt @ 64f4fe7e · temperature 0</div></th>
+      <td>3</td>
+      <td>0%</td><td>100%</td><td>100%</td><td>100%</td><td>100%</td><td>0%</td>
+      <td>0 of 24</td>
+      <td>0 of 24</td>
+      <td>5100 ms</td>
+      <td>4979</td>
+    </tr><tr>
+      <th>procedure-gpt-oss<div class="sub">Same procedure prompt on gpt-oss-20b, an open-weight model that can run on-prem.</div><div class="sub mono">bedrock:openai.gpt-oss-20b-1:0 · prompts/procedure.txt @ 64f4fe7e · temperature 0</div></th>
+      <td>3</td>
+      <td>11% <span class="range">(0%–17%)</span></td><td>83% <span class="range">(50%–100%)</span></td><td>88% <span class="range">(75%–100%)</span></td><td>100%</td><td>100%</td><td>5% <span class="range">(0%–14%)</span></td>
+      <td>2 of 24</td>
+      <td>0 of 24</td>
+      <td>5955 ms</td>
+      <td>3534</td>
+    </tr><tr>
+      <th>rulebook<div class="sub">Baseline prompt plus the rulebook text as written. No steps, no tool order, no citation instructions.</div><div class="sub mono">bedrock:us.anthropic.claude-sonnet-4-6 · prompts/rulebook.txt @ 00957360 · temperature 0</div></th>
+      <td>3</td>
+      <td>0%</td><td>100%</td><td>88%</td><td>100%</td><td>0%</td><td>0%</td>
+      <td>0 of 24</td>
+      <td>3 of 24</td>
+      <td>5823 ms</td>
+      <td>5328</td>
+    </tr><tr>
+      <th>rules-only<div class="sub">No model. Code reads ids, full catalog names and destination names from the request, then applies the rulebook.</div><div class="sub mono">none · src/rules-only.ts @ a012a8dc</div></th>
+      <td>3</td>
+      <td>17%</td><td>0%</td><td>63%</td><td>100%</td><td>0%</td><td>29%</td>
+      <td>3 of 24</td>
+      <td>0 of 24</td>
+      <td>0 ms</td>
+      <td>0</td>
+    </tr></tbody>
+  </table>
+  <p class="note">Rates are the mean over runs, with the range across runs in brackets when they differ. Unsafe allows and no-decision counts are pooled over all runs.</p>
+  
+    <h2><a href="3-core-rerun/report.html">3-core-rerun</a> <span class="sub">core set · 6 runs</span></h2>
+    <table>
+    <thead><tr><th>Variant</th><th>Runs</th><th>Unsafe-allow rate</th><th>Approval rate</th><th>Label accuracy</th><th>Citation validity</th><th>Silent abstention</th><th>Over-abstain rate</th><th>Unsafe allows</th><th>No decision</th><th>Median latency</th><th>Tokens per case</th></tr></thead>
+    <tbody><tr>
+      <th>baseline<div class="sub">Short prompt: the task, the four labels, the output format. No procedure.</div><div class="sub mono">bedrock:us.anthropic.claude-sonnet-4-6 · prompts/baseline.txt @ 56b548d7 · temperature 0</div></th>
+      <td>3</td>
+      <td>0%</td><td>100%</td><td>78% <span class="range">(75%–80%)</span></td><td>74% <span class="range">(73%–75%)</span></td><td>40%</td><td>0%</td>
+      <td>0 of 60</td>
+      <td>7 of 60</td>
+      <td>5497 ms</td>
+      <td>4456</td>
+    </tr><tr>
+      <th>rules-only<div class="sub">No model. Code reads ids, full catalog names and destination names from the request, then applies the rulebook.</div><div class="sub mono">none · src/rules-only.ts @ a012a8dc</div></th>
+      <td>3</td>
+      <td>0%</td><td>100%</td><td>100%</td><td>95%</td><td>100%</td><td>0%</td>
+      <td>0 of 60</td>
+      <td>0 of 60</td>
+      <td>0 ms</td>
+      <td>0</td>
+    </tr></tbody>
+  </table>
+  <p class="note">Rates are the mean over runs, with the range across runs in brackets when they differ. Unsafe allows and no-decision counts are pooled over all runs.</p>
+  
+    <h2><a href="2-core-rulebook/report.html">2-core-rulebook</a> <span class="sub">core set · 3 runs</span></h2>
+    <table>
+    <thead><tr><th>Variant</th><th>Runs</th><th>Unsafe-allow rate</th><th>Approval rate</th><th>Label accuracy</th><th>Citation validity</th><th>Silent abstention</th><th>Over-abstain rate</th><th>Unsafe allows</th><th>No decision</th><th>Median latency</th><th>Tokens per case</th></tr></thead>
+    <tbody><tr>
+      <th>rulebook<div class="sub">Baseline prompt plus the rulebook text as written. No steps, no tool order, no citation instructions.</div><div class="sub mono">bedrock:us.anthropic.claude-sonnet-4-6 · prompts/rulebook.txt @ 00957360 · temperature 0</div></th>
+      <td>3</td>
+      <td>0%</td><td>100%</td><td>85%</td><td>100%</td><td>60%</td><td>0%</td>
+      <td>0 of 60</td>
+      <td>9 of 60</td>
+      <td>4875 ms</td>
+      <td>5035</td>
+    </tr></tbody>
+  </table>
+  <p class="note">Rates are the mean over runs, with the range across runs in brackets when they differ. Unsafe allows and no-decision counts are pooled over all runs.</p>
+  
+    <h2><a href="1-core/report.html">1-core</a> <span class="sub">core set · 9 runs</span></h2>
+    <table>
+    <thead><tr><th>Variant</th><th>Runs</th><th>Unsafe-allow rate</th><th>Approval rate</th><th>Label accuracy</th><th>Citation validity</th><th>Silent abstention</th><th>Over-abstain rate</th><th>Unsafe allows</th><th>No decision</th><th>Median latency</th><th>Tokens per case</th></tr></thead>
+    <tbody><tr>
+      <th>baseline<div class="sub">Short prompt: the task, the four labels, the output format. No procedure.</div><div class="sub mono">bedrock:us.anthropic.claude-sonnet-4-6 · prompts/baseline.txt @ 56b548d7 · temperature 0</div></th>
+      <td>3</td>
+      <td>0%</td><td>100%</td><td>77% <span class="range">(75%–80%)</span></td><td>74% <span class="range">(73%–75%)</span></td><td>40%</td><td>0%</td>
+      <td>0 of 60</td>
+      <td>4 of 60</td>
+      <td>5741 ms</td>
+      <td>4347</td>
+    </tr><tr>
+      <th>procedure<div class="sub">The rulebook as numbered steps, with what to cite at each step.</div><div class="sub mono">bedrock:us.anthropic.claude-sonnet-4-6 · prompts/procedure.txt @ 64f4fe7e · temperature 0</div></th>
+      <td>3</td>
+      <td>0%</td><td>100%</td><td>97% <span class="range">(95%–100%)</span></td><td>100%</td><td>100%</td><td>4% <span class="range">(0%–7%)</span></td>
+      <td>0 of 60</td>
+      <td>0 of 60</td>
+      <td>4584 ms</td>
+      <td>4526</td>
+    </tr><tr>
+      <th>procedure-gpt-oss<div class="sub">Same procedure prompt on gpt-oss-20b, an open-weight model that can run on-prem.</div><div class="sub mono">bedrock:openai.gpt-oss-20b-1:0 · prompts/procedure.txt @ 64f4fe7e · temperature 0</div></th>
+      <td>3</td>
+      <td>0%</td><td>100%</td><td>92% <span class="range">(90%–95%)</span></td><td>100%</td><td>100%</td><td>11% <span class="range">(7%–13%)</span></td>
+      <td>0 of 60</td>
+      <td>0 of 60</td>
+      <td>4738 ms</td>
+      <td>3541</td>
+    </tr></tbody>
+  </table>
+  <p class="note">Rates are the mean over runs, with the range across runs in brackets when they differ. Unsafe allows and no-decision counts are pooled over all runs.</p>
+  </body></html>

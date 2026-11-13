@@ -1,0 +1,21 @@
+{
+  "name": "ai71",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "eval": "tsx src/run.ts",
+    "report": "tsx src/run.ts --report-only"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "tsx": "^4.23.15",
+    "typescript": "^5.7.3",
+    "vitest": "^3.2.4"
+  },
+  "dependencies": {
+    "@aws-sdk/client-bedrock-runtime": "^3.1165.0",
+    "@aws-sdk/credential-providers": "^3.1165.0",
+    "zod": "^4.6.7"
+  }
+}
